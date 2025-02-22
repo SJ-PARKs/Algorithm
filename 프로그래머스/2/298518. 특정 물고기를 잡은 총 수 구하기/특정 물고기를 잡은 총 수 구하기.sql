@@ -1,0 +1,6 @@
+-- 코드를 작성해주세요
+
+SELECT COUNT(ID) as FISH_COUNT
+FROM FISH_INFO as a JOIN FISH_NAME_INFO as b
+ON a.fish_type = b.fish_type
+WHERE FISH_NAME="BASS" or FISH_NAME="SNAPPER";
