@@ -1,12 +1,14 @@
 def solution(clothes):
-    clothe=dict()
-    for c in clothes:
-        if c[1] not in clothe:
-            clothe[c[1]]=0
-        clothe[c[1]]+=1
-
     answer = 1
-    for i in clothe.values():
-        answer*=i+1
-    answer-=1
-    return answer
+    cnt=dict()
+    for clothe in clothes:
+        if clothe[1] not in cnt:
+            cnt[clothe[1]]=1
+        else:
+            cnt[clothe[1]]+=1
+        
+        
+    for value in cnt.values():
+        answer*=(value+1)
+    
+    return answer-1
