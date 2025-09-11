@@ -1,19 +1,21 @@
+answer =-1
 def solution(k, dungeons):
-    global answer
-    answer=-1
     chk=[0 for _ in range(len(dungeons))]
-    DFS(k,dungeons,chk,0)
-    return answer
-def DFS(k,dungeons,chk,cnt):
-    global answer
-    if cnt>answer:
-        answer=cnt
     for i in range(len(dungeons)):
-        if k>=dungeons[i][0] and chk[i]==0:
-            k-=dungeons[i][1]
-            chk[i]=1
-            DFS(k,dungeons,chk,cnt+1)
-            chk[i]=0
-            k+=dungeons[i][1]
-    
-    
+        if dungeons[i][0]<=k and k-dungeons[i][1]>=0:
+            DFS(i,1,k-dungeons[i][1],chk,dungeons)
+    return answer
+
+
+def DFS(x,count,health,chk,dungeons):
+    global answer
+    if count>answer:
+        answer=count
+    chk[x]=1
+    for i in range(len(dungeons)):
+        if chk[i]==1:
+            continue
+        if health-dungeons[i][1]>=0 and dungeons[i][0]<=health:
+            DFS(i,count+1,health-dungeons[i][1],chk,dungeons)
+    chk[x]=0
+        
