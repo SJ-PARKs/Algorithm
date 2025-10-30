@@ -1,21 +1,17 @@
-answer =-1
+from itertools import permutations
+
 def solution(k, dungeons):
-    chk=[0 for _ in range(len(dungeons))]
-    for i in range(len(dungeons)):
-        if dungeons[i][0]<=k and k-dungeons[i][1]>=0:
-            DFS(i,1,k-dungeons[i][1],chk,dungeons)
+    answer = -1
+    arr=list(permutations(dungeons))
+    maximum=0
+    for i in range(len(arr)):
+        num=0
+        start=k
+        for j in range(len(arr[i])):
+            if start>=arr[i][j][0]:
+                start-=arr[i][j][1]
+                num+=1
+        if num>maximum:
+            maximum=num
+    answer=maximum
     return answer
-
-
-def DFS(x,count,health,chk,dungeons):
-    global answer
-    if count>answer:
-        answer=count
-    chk[x]=1
-    for i in range(len(dungeons)):
-        if chk[i]==1:
-            continue
-        if health-dungeons[i][1]>=0 and dungeons[i][0]<=health:
-            DFS(i,count+1,health-dungeons[i][1],chk,dungeons)
-    chk[x]=0
-        
