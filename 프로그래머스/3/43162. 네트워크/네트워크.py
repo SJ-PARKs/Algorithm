@@ -1,29 +1,29 @@
 def solution(n, computers):
+    global graph,chk
     answer = 0
-    network=[[] for _ in range(n+1)]
-    global chk
     chk=[0 for _ in range(n+1)]
-    for i in range(n):
-        for j in range(n):
+    graph=[[] for _ in range(n+1)]
+    for i in range(len(computers)):
+        for j in range(len(computers[i])):
             if i==j:
                 continue
             if computers[i][j]==1:
-                network[i+1].append(j+1)
-    
-    print(network)
-    for i in range(len(network)):
+                graph[i+1].append(j+1)
+ 
+    for i in range(1,n+1):
         if chk[i]==0:
-            DFS(i,network) 
             answer+=1
+            DFS(i)
+    
+    return answer
 
-    return answer-1
+def DFS(n):
+    global graph,chk
 
-def DFS(x,network):
-    global chk
-    if chk[x]==1:
+    if chk[n]==1:
         return
-    chk[x]=1
-    for computer in network[x]:
-        DFS(computer,network)
-        
+    chk[n]=1
+    for i in range(len(graph[n])):
+        if chk[graph[n][i]]==0:
+            DFS(graph[n][i])
         
