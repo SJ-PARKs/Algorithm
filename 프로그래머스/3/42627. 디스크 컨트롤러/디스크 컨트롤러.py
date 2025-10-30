@@ -1,25 +1,18 @@
-import heapq
-
 def solution(jobs):
-    disk=[]
-
-    for i in range(len(jobs)):
-        disk.append((jobs[i][1],jobs[i][0],i))
-    disk=sorted(disk)
-    
+    n=len(jobs)
+    answer = 0
     time=0
-    answer=0
-    while len(disk)!=0:
+    while jobs:
+        jobs=sorted(jobs,key=lambda x:x[0])
+        jobs=sorted(jobs,key=lambda x:x[1])
         flag=False
-        for i in range(len(disk)):
-            if time>=disk[i][1]:
-                x=disk.pop(i)
+        for i in range(len(jobs)):
+            if time>=jobs[i][0]:
+                time+=jobs[i][1]
+                answer+=time-jobs[i][0]
+                jobs.pop(i)
                 flag=True
                 break
-        if flag==True:
-            answer+=time-x[1]+x[0]
-            time+=x[0]
-        else:
-            time = min(disk, key=lambda x: x[1])[1]
-
-    return answer//len(jobs)
+        if flag==False:
+             time = min(j[0] for j in jobs)
+    return answer//n
