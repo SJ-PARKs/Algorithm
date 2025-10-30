@@ -1,17 +1,15 @@
 def solution(numbers, target):
+    global answer
     answer = 0
-    global count
-    count=0
-    DFS(numbers,0,target,0)
-    return count
+    DFS(numbers,0,target,0,len(numbers))
+    return answer
 
-def DFS(numbers,x,target,hap):
-    global count
-    if x==len(numbers):
+def DFS(numbers,hap,target,cur,end):
+    global answer
+    if cur==end:
         if hap==target:
-            count+=1
-        return 
-    a=hap+numbers[x]
-    b=hap-numbers[x]
-    DFS(numbers,x+1,target,a)
-    DFS(numbers,x+1,target,b)    
+            answer+=1
+        return
+    
+    DFS(numbers,hap+numbers[cur],target,cur+1,end)
+    DFS(numbers,hap-numbers[cur],target,cur+1,end)
