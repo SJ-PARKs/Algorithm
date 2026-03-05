@@ -1,8 +1,21 @@
 -- 코드를 입력하세요
-SELECT CATEGORY, PRICE as MAX_PRICE, PRODUCT_NAME
-FROM FOOD_PRODUCT
-WHERE (CATEGORY,PRICE) in (SELECT CATEGORY, MAX(PRICE)
-                        FROM FOOD_PRODUCT
-                        GROUP BY CATEGORY)
-                        and CATEGORY in ('과자','국','김치','식용유')
-ORDER BY PRICE DESC
+WITH TEMP_TABLE AS (
+    SELECT 
+        PRODUCT_ID,
+        PRODUCT_NAME,
+        CATEGORY,
+        PRICE,
+        RANK() OVER(
+            PARTITION BY CATEGORY
+            ORDER BY PRICE DESC    
+        ) AS R
+    FROM 
+        FOOD_PRODUCT
+    WHERE 
+        CATEGORY="과자" OR CATEGORY="국" OR CATEGORY="김치" OR CATEGORY="식용유"
+)
+
+SELECT CATEGORY, PRICE AS MAX_PRICE, PRODUCT_NAME
+FROM TEMP_TABLE
+WHERE R=1
+ORDER BY MAX_PRICE DESC
