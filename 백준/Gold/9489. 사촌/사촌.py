@@ -1,56 +1,31 @@
-while(True):
+while True:
 	n,k=map(int,input().split())
 	if n==0 and k==0:
 		break
-	if n==1:
-		arr=list(map(int,input().split()))
-		print(0)
-		continue
-
-		
-	arr=list(map(int,input().split()))
-
-	idx=0
-	cut=[]
-	parent=[]
-
-	cut.append([arr[0]])
-	parent.append(0)
-	temp=[]
-	for i in range(1,len(arr)-1):
-		if arr[i]+1==arr[i+1]:
-			temp.append(arr[i])
+	node=list(map(int,input().split()))
+	parent_idx,before,ans=-1,0,0
+	parent=[0 for _ in range(1000001)]
+	for i in range(len(node)):
+		data=node[i]
+		if i==0: # 첫입력이면 루트노드임.
+			before=data
+			parent[data]=-1 # 자기가 자신의 부모임.
 		else:
-			temp.append(arr[i])
-			cut.append(temp)
-			temp=[]
-			parent.append(arr[idx])
-			idx+=1
-	cut.append(temp)		
-	parent.append(arr[idx])
-	if arr[-1]==arr[-2]+1:
-		cut[-1].append(arr[-1])
+			if before+1==data: # 같은집합.
+				parent[data]=node[parent_idx]
+				before=data
+			else:
+				before=data
+				parent_idx+=1
+				parent[data]=node[parent_idx]
+	# parent[data]에는 data의 부모가 있습니다.우리는 k의 사촌 수를 찾아야 합니다.
+	if k==node[0]:
+		ans=0
 	else:
-		cut.append([arr[-1]])
-		parent.append(arr[idx])
-
-	idx1=0
-	idx2=[]
-
-	for i in range(len(cut)):
-		if k in cut[i]:
-			idx1=parent[i]
-			break
-	for i in range(len(cut)):
-		if idx1 in cut[i]:
-			idx2=cut[i]
-
-	answer=0
-	for i in range(len(idx2)):
-		if idx2[i]==idx1:
-			continue
-		for j in range(len(parent)):
-			if parent[j]==idx2[i]:
-				answer+=len(cut[j])
-
-	print(answer)
+		for i in range(len(node)):
+			#  k와 부모가 다르고, k의 부모들과 부모가 같아야합니다.
+			if (parent[parent[node[i]]]==parent[parent[k]]) and (parent[node[i]] != parent[k]):
+				ans+=1
+				
+	print(ans)
+			
