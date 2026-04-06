@@ -1,46 +1,41 @@
-import sys
-input = sys.stdin.readline 
+class Solution:
+	def __init__(self,n,k,arr):
+		self.n=n
+		self.k=k
+		self.arr=arr
+		self.count_num=dict()
+		self.answer=0
+		
+	def find_longest_sequence(self):
+		n=self.n
+		k=self.k
+		arr=self.arr
+		count_num=self.count_num
+		answer=self.answer
+		
+		l=0
+		for r in range(n):
+			num=arr[r]
+			if num not in count_num:
+				count_num[num]=0
+			count_num[num]+=1
+			if count_num[num]>k:
+				while arr[l]!=num:
+					count_num[arr[l]]-=1
+					l+=1
+				count_num[arr[l]]-=1
+				l+=1
+			
+			answer=max(answer,r-l+1)
+			
+		print(answer)
+		
+class Main:
+	def run(self):
+		n,k=map(int,input().split())
+		arr=list(map(int,input().split()))
+		sol=Solution(n,k,arr)
+		sol.find_longest_sequence()
 
-n,k=map(int,input().split())
-arr=list(map(int,input().split()))
-
-chk=[0]*(1000001)
-e,s=0,0
-result=0
-maximum=0
-while s<len(arr):
-	if chk[arr[s]]<k:
-		chk[arr[s]]+=1
-		s+=1
-	else:
-		chk[arr[e]]-=1
-		e+=1
-	if s-e>maximum:
-		maximum=s-e
-print(maximum)
-
-
-# n,k=map(int,input().split())
-# arr=list(map(int,input().split()))
-
-# p1,p2=0,0
-# answer=0
-# count=dict()
-
-# def add_count(x):
-# 	if x not in count:
-# 		count[x]=0
-# 	count[x]+=1
-
-# while p2<len(arr):
-# 	if arr[p2] in count and count[arr[p2]]>=k:
-# 		while count[arr[p1]]==k:
-# 			count[arr[p1]]-=1
-# 			p1+=1
-# 	else:
-# 		add_count(arr[p2])
-# 		p2+=1
-# 	if p2-p1>answer:
-# 		answer=p2-p1
-
-# print(answer)
+Main().run()
+		
