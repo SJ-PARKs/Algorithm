@@ -1,51 +1,37 @@
 def solution(message, spoiler_ranges):
     answer = 0
-
+    words=message.split()
+    words_len=[]
     
-    # words: 단어 배열, words_locate:처음과 끝만
-    words=[]
-    words_locate=[]
-    words_set=set()
+    start=0
+    if message[0]==" ":
+        start=1
+    for i in range(len(words)):
+        tmp=[]
+        tmp.append(start)
+        start+=len(words[i])-1
+        tmp.append(start)
+        words_len.append(tmp)
+        start+=2
     
-    w=""
-    flag=True
-    s=0
-    for i in range(len(message)):
-        if message[i]==" ":
-            if w!="":
-                words.append(w)
-                words_locate.append([s,i-1])
-                flag=True
-            w=""
-        else:
-            if flag:
-                s=i
+    not_hide_word=[]
+    hide_word=[]
+    
+    for i in range(len(words)):
+        for j in range(len(spoiler_ranges)):
+            flag=True
+            if words_len[i][0]<=spoiler_ranges[j][0]<=words_len[i][1] or words_len[i][0]<=spoiler_ranges[j][1]<=words_len[i][1] or spoiler_ranges[j][0]<=words_len[i][0]<=spoiler_ranges[j][1] or spoiler_ranges[j][0]<=words_len[i][1]<=spoiler_ranges[j][1]:
                 flag=False
-            w+=message[i]
+                hide_word.append(words[i])
+                break
+        if flag:
+            not_hide_word.append(words[i])
+    print(not_hide_word)
+    print(hide_word)
             
-    if w != "":
-        words.append(w)
-        words_locate.append([s, len(message)-1])
-
-    # 스포 방지 된 단어인지 체크하는 배열    
-    chk=[0 for _ in range(len(words))]
-    
-    for i in range(len(spoiler_ranges)):
-        start,end=spoiler_ranges[i][0],spoiler_ranges[i][1]
-        for j in range(len(words_locate)):
-            if start<=words_locate[j][0]<=end or start<=words_locate[j][1]<=end:
-                chk[j]=1
-            if words_locate[j][0]<=start<=words_locate[j][1] or words_locate[j][0]<=end<=words_locate[j][1]:
-                chk[j]=1
-    
-    for i in range(len(words)):
-        if chk[i]==0:
-            words_set.add(words[i])
-    
-    for i in range(len(words)):
-        if chk[i]==1:
-            if words[i] not in words_set:
-                answer+=1
-                words_set.add(words[i])
-            
+    for i in range(len(hide_word)):
+        if hide_word[i] not in not_hide_word:
+            answer+=1
+            not_hide_word.append(hide_word[i])
+        
     return answer
