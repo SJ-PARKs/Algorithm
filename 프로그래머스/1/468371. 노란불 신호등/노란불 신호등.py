@@ -14,9 +14,9 @@ def solution(signals):
             r=signals[i][2]
             c=g+y+r
         
-            remain=(t-1)%c
+            remain=(t)%c
     
-            if (g<=remain and remain<g+y) is False:
+            if (g<remain and remain<=g+y) is False:
                 isAllYellow=False
                 break
     
